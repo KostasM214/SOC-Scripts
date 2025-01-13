@@ -4,7 +4,7 @@
 
 # NOTICE: SCRIPT MIGHT NEED ADJUSTMENTS BASED ON THE LOG FORMAT YOU NEED TO ANALIZE
 # Default log file path is Downloads. The user can pass the log file path as an argument.
-LOG_FILE="{1:-$HOME/Downloads/access_log}"
+LOG_FILE="$HOME/Downloads/access_log"
 
 # Check if the log file exists
 if [[ ! -f "$LOG_FILE" ]]; then
@@ -44,7 +44,7 @@ if ask_user "Analyze HTTP Status Codes?"; then
 fi
 
 # Provides a list of the Top 10 IPs that accessed the server.
-# Change number of IP results by altering <head [num]>
+# Change number of IP results by altering <head [-num]>
 if ask_user "Display Top 10 IPs Accessing the Server?"; then
     if $exit_script; then exit 0; fi
     echo "Top 10 IPs Accessing the Server:"
@@ -53,7 +53,7 @@ if ask_user "Display Top 10 IPs Accessing the Server?"; then
 fi
 
 # Provides a list of the top 10 Requested URLs.
-# Change number of URL results by altering <head [num]>
+# Change number of URL results by altering <head [-num]>
 if ask_user "Display Top 10 Requested URLs?"; then
     if $exit_script; then exit 0; fi
     echo "Top 10 Requested URLs:"
@@ -62,7 +62,7 @@ if ask_user "Display Top 10 Requested URLs?"; then
 fi
 
 # Provides a list of the top 10 User-Agent strings.
-# Change number of User-Agent String results by altering <head [num]>
+# Change number of User-Agent String results by altering <head [-num]>
 if ask_user "Analyze Most Common User-Agent Strings?"; then
     if $exit_script; then exit 0; fi
     echo "Most Common User-Agent Strings:"
