@@ -3,7 +3,7 @@
 # Interactive Log Analysis Script
 
 # NOTICE: SCRIPT MIGHT NEED ADJUSTMENTS BASED ON THE LOG FORMAT YOU NEED TO ANALIZE
-# Default log file path is Downloads. The user can pass the log file path as an argument.
+# Default log file path is Downloads
 LOG_FILE="$HOME/Downloads/access_log"
 
 # Check if the log file exists
