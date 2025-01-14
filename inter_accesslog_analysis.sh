@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Interactive Log Analysis Script
+# Interactive Apache Access_Log Analysis Script
 
 # NOTICE: SCRIPT MIGHT NEED ADJUSTMENTS BASED ON THE LOG FORMAT YOU NEED TO ANALIZE
 # Default log file path is Downloads
