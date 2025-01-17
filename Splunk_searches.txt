@@ -1,0 +1,33 @@
+# List of useful searches for Splunk SIEM
+
+# Fields used in my testing environment most probably will not apply to other company production environments.
+# This file is only for training purposes; having said that, if the searches are modified with appropriate data, they will work.
+
+# Email monitoring
+
+#Suspicious email subject with attachments
+index="<index>" subject="*" attachment="*" | search subject="urgent" OR subject="payment" | stats count by sender_domain subject attachment
+
+# Large attachments
+index="<index>" attach_size>10000 | table attach_filename attach_size
+
+# External domains that interacted with you company
+index="<index>" sender_domain!=company.com | stats count by sender_domain
+
+# Suspicious attachments based on file type
+index="<index>" attachment_name=*.exe OR attachment_name=*.bat OR attachment_name=*.vbs OR attachment_name=*.lnk OR attachment_name=*.ps1 | table sender recipient attachment_name
+
+# Suspicious outgoing emails based on attachment size
+index="<index>" attachment_size>10MB sender_domain!=company.com | table sender recipient attachment_name attachment_size
+
+# Emails Sent to Multiple External Recipients
+index="<index>" recipient_domain!=mycompany.com | stats count by sender recipient_domain | where count > 5
+
+# Emails with Common Phishing Keywords
+index="<index>" subject="*" | search subject="verify" OR subject="urgent" OR subject="account suspended" | table sender recipient subject
+
+# High Email Traffic:
+index="<index>" smtp | timechart span=1h count by sender
+
+# Sensitive Data in Email:
+index="<index>" body=* | search body="SSN" OR body="credit card" OR body="confidential" | table sender recipient subject body
