@@ -1,7 +1,8 @@
 # List of useful searches for Splunk SIEM
 
 # Fields used in my testing environment most probably will not apply to other company production environments.
-# This file is only for training purposes; having said that, if the searches are modified with appropriate data, they will work.
+# This file is only for training/knowledge purposes; having said that, if the searches are modified with appropriate data, they will work.
+
 
 # Email monitoring
 
@@ -26,8 +27,50 @@ index="<index>" recipient_domain!=mycompany.com | stats count by sender recipien
 # Emails with Common Phishing Keywords
 index="<index>" subject="*" | search subject="verify" OR subject="urgent" OR subject="account suspended" | table sender recipient subject
 
-# High Email Traffic:
+# High Email Traffic
 index="<index>" smtp | timechart span=1h count by sender
 
-# Sensitive Data in Email:
+# Sensitive Data in Email
 index="<index>" body=* | search body="SSN" OR body="credit card" OR body="confidential" | table sender recipient subject body
+
+
+# Linux Logs
+
+# Failed SSH Login Attempts
+index=linux_logs sourcetype=sshd action=failure | stats count by src_ip user
+
+# Sudo Command Execution
+index=linux_logs "COMMAND=" | stats count by user command
+
+# Failed Login Attempts by IP
+index=linux_logs sourcetype=sshd action=failure | stats count by src_ip
+
+# Successful Logins by User
+index=linux_logs sourcetype=sshd action=success | stats count by user
+
+# Repeated Login Failures (Brute Force Detection)
+index=linux_logs sourcetype=sshd action=failure | stats count by src_ip user | where count > 5
+
+# Root Account Logins
+index=linux_logs sourcetype=sshd user=root | stats count by src_ip
+
+# New User Creation
+index=linux_logs "useradd" | table user src_ip
+
+# Users Added to Privileged Groups
+index=linux_logs "groupadd" OR "usermod -aG" | table _time user group
+
+# Processes Listening on Non-Standard Ports
+index=linux_logs "LISTEN" | search NOT (port=22 OR port=80 OR port=443) | stats count by process_name port
+
+# Modified Critical Files
+index=linux_logs sourcetype=fschange file="/etc/passwd" OR file="/etc/shadow" | table _time file action user
+
+# Outgoing Connections to Unusual Ports
+index=linux_logs sourcetype=syslog "ESTABLISHED" | search NOT (dest_port=80 OR dest_port=443) | stats count by src_ip dest_port
+
+# Port Scanning Activity
+index=linux_logs sourcetype=syslog "connect" | stats count by src_ip dest_port | where count > 10
+
+
+
