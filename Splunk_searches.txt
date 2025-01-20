@@ -72,5 +72,11 @@ index=linux_logs sourcetype=syslog "ESTABLISHED" | search NOT (dest_port=80 OR d
 # Port Scanning Activity
 index=linux_logs sourcetype=syslog "connect" | stats count by src_ip dest_port | where count > 10
 
+#Suspicious Shell Activity
+index=linux_logs sourcetype=syslog command="wget" OR command="curl" OR command="nc" | table _time user command
 
+# Unusual Privilege Escalation Attempts
+index=linux_logs "sudo" "password:" | stats count by user src_ip
 
+# Rare Commands Executed
+index=linux_logs "COMMAND=" | stats count by command | where count < 5
